@@ -43,6 +43,8 @@ const verifyToken = async (req, res, next) => {
     }
 };
 
+//#region Student Details
+
 app.get(API_PREFIX + 'get-student-detail-by-id/:studentid', async (req, res) => {
     try {
         const studentid = req.params['studentid'];
@@ -63,6 +65,8 @@ app.get(API_PREFIX + 'get-all-student-details', async (_req, res) => {
         res.status(500).send('Server error');
     }
 });
+
+//#endregion
 
 // Port Number
 const PORT = process.env.PORT || 5000;
