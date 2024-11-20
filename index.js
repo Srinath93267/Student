@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json())
 
 // SQL Server Configuration
-const sqlConfig = require("./Config/studentdbazure.json");
+const sqlConfig = require("./studentdbazure.json");
 const API_PREFIX = '/student/';
 
 const jwtSecret = 'your_jwt_secret';

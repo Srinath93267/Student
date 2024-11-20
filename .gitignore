@@ -6949,3 +6949,7 @@ node_modules/wrappy/package.json
 node_modules/wrappy/README.md
 node_modules/wrappy/wrappy.js
 Config/studentdb.json
+node_modules
+
+# Local Netlify folder
+.netlify
