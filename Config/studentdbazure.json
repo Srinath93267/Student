@@ -1,10 +1,16 @@
 {
-    "user": "user",
-    "password": "password",
-    "database": "database",
-    "server": "server",
+    "server": "studentschooldetails.database.windows.net",
+    "authentication": {
+        "type": "default",
+        "options": {
+            "database": "STUDENTBASIC",
+            "userName": "studentschooldetailsadmin",
+            "password": "Student@123"
+        }
+    },
     "options": {
-        "trustedConnection": true,
+        "database": "STUDENTBASIC",
+        "encrypt": true,
         "trustServerCertificate": true
     }
 }

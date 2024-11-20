@@ -3,13 +3,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sql = require('mssql');
 const jwt = require('jsonwebtoken'); // For generating authentication tokens
+const router = express.Router();
+const serverless = require("serverless-http");
 
 // Creating express object
 const app = express();
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // SQL Server Configuration
-const sqlConfig = require("./Config/studentdbazure.json");
+const sqlConfig = require("../Config/studentdbazure.json");
 const API_PREFIX = '/student/';
 
 const jwtSecret = 'your_jwt_secret';
@@ -45,7 +47,7 @@ const verifyToken = async (req, res, next) => {
 
 //#region Student Details
 
-app.get(API_PREFIX + 'get-login-admin', async (req, res) => {
+router.get(API_PREFIX + 'get-login-admin', async (req, res) => {
     try {
         const { username, password } = req.body;
         const result = await sql.query`EXEC GetLoginAdmin @UserName=${username}, @PasswordHash=${password};`;
@@ -68,7 +70,7 @@ app.get(API_PREFIX + 'get-login-admin', async (req, res) => {
     }
 });
 
-app.get(API_PREFIX + 'get-student-detail-by-id/:studentid', verifyToken, async (req, res) => {
+router.get(API_PREFIX + 'get-student-detail-by-id/:studentid', verifyToken, async (req, res) => {
     try {
         const studentid = req.params['studentid'];
         const result = await sql.query`EXEC GetStudentDetails @StudentID=${studentid};`;
@@ -79,7 +81,7 @@ app.get(API_PREFIX + 'get-student-detail-by-id/:studentid', verifyToken, async (
     }
 });
 
-app.get(API_PREFIX + 'get-all-student-details', verifyToken, async (_req, res) => {
+router.get(API_PREFIX + 'get-all-student-details', verifyToken, async (_req, res) => {
     try {
         const result = await sql.query`EXEC GetStudentDetails;`;
         res.status(200).json(result.recordset); // Send the result set as JSON
@@ -91,9 +93,5 @@ app.get(API_PREFIX + 'get-all-student-details', verifyToken, async (_req, res) =
 
 //#endregion
 
-// Port Number
-const PORT = process.env.PORT || 5000;
-
-// Server Setup
-app.listen(PORT, console.log(
-    `Server started on port ${PORT}`));
+app.use("/.netlify/functions/app", router);
+module.exports.handler = serverless(app);
