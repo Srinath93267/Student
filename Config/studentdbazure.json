@@ -1,0 +1,10 @@
+{
+    "user": "<user>",
+    "password": "<password>",
+    "database": "<database>",
+    "server": "<servername>",
+    "port": 1433,
+    "options": {
+        "encrypt": true
+    }
+}
