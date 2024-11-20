@@ -93,5 +93,5 @@ router.get(API_PREFIX + 'get-all-student-details', verifyToken, async (_req, res
 
 //#endregion
 
-app.use("/.netlify/functions/app", router);
+app.use("/.netlify/functions/index", router);
 module.exports.handler = serverless(app);
