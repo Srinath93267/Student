@@ -1,12 +1,13 @@
 // Requiring module
-const express = require('express');
+const functions = require("firebase-functions");
+const express = require("express");
+const app = express();
 const bodyParser = require('body-parser');
 const sql = require('mssql');
 const jwt = require('jsonwebtoken'); // For generating authentication tokens
 
-// Creating express object
-const app = express();
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(express.json());
 
 // SQL Server Configuration
 const sqlConfig = require("./Config/studentdbazure.json");
@@ -45,11 +46,12 @@ const verifyToken = async (req, res, next) => {
 
 //#region Student Details
 
-app.get(API_PREFIX + 'get-login-admin', async (req, res) => {
+app.post(API_PREFIX + 'get-login-admin', async (req, res) => {
     try {
         const { username, password } = req.body;
         const result = await sql.query`EXEC GetLoginAdmin @UserName=${username}, @PasswordHash=${password};`;
         const ifexists = JSON.stringify(result.recordset)[10];
+        console.log(ifexists);
         if (ifexists === "1") {
             // Options for the token, including expiry
             const options = {
@@ -89,11 +91,5 @@ app.get(API_PREFIX + 'get-all-student-details', verifyToken, async (_req, res) =
     }
 });
 
-//#endregion
-
-// Port Number
-const PORT = process.env.PORT || 5000;
-
-// Server Setup
-app.listen(PORT, console.log(
-    `Server started on port ${PORT}`));
+// Export the app as a Firebase function
+exports.api = functions.https.onRequest(app);
