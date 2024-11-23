@@ -55,7 +55,6 @@ app.post(API_PREFIX + 'get-login-admin', async (req, res) => {
         const { username, password } = req.body;
         const result = await sql.query`EXEC GetLoginAdmin @UserName=${username}, @PasswordHash=${password};`;
         const ifexists = JSON.stringify(result.recordset)[10];
-        console.log(ifexists);
         if (ifexists === "1") {
             // Options for the token, including expiry
             const options = {
@@ -146,7 +145,7 @@ async function callApi(studentID, authHeader, apiEndPoint) {
     }
 }
 
-const LocalDebug = true;
+const LocalDebug = false;
 
 if (LocalDebug === true) {
     // Port Number
